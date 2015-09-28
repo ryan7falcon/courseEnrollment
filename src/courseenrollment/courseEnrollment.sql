@@ -58,12 +58,5 @@
             ('PROG30000', '000000006');
 
 
-    -- queries
-    SELECT firstName, lastName FROM Student
-            INNER JOIN CourseStudent ON student.id = CourseStudent.studentId
-            WHERE CourseStudent.courseId = 'MATH10000';
-
-    SELECT title FROM Course
-            INNER JOIN CourseStudent ON course.id = CourseStudent.courseId
-            WHERE CourseStudent.studentId = '000000002';
+    
 
