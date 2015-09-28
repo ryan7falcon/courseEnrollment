@@ -14,6 +14,7 @@ import java.sql.ResultSet;
  */
 public class CourseEnrollment {
 
+    
     /**
      * @param args the command line arguments
      */
@@ -24,26 +25,54 @@ public class CourseEnrollment {
         //test connection: location, user name, password
         boolean connected = jdbc.connect("jdbc:mysql://localhost:3306/ejd", 
                                         "root", "dataPASS");
-        System.out.println(connected);
-        //clean-up, close method
-        String sql = "SELECT * FROM Book";
+   
+        //queries
+        String q0 = "SELECT * FROM Student";
+        printStudentList("", q0, jdbc);
         
+        String c1 = "MATH10000";
+        String q1 = "SELECT firstName, lastName FROM Student "
+                + "INNER JOIN CourseStudent ON student.id = CourseStudent.studentId "
+                + "WHERE CourseStudent.courseId = " + "'" + c1 + "'";
+        printStudentList(c1, q1, jdbc);
+        
+        String c2 = "PROG30000";
+        String q2 =  "SELECT firstName, lastName FROM Student "
+                + "INNER JOIN CourseStudent ON student.id = CourseStudent.studentId "
+                + "WHERE CourseStudent.courseId = " + "'" + c2 + "'";
+        printStudentList(c2, q2, jdbc);
+        
+        //disconnect from the database
+        jdbc.disconnect();
+    }
+    
+    //prints a list, obtained from the querym 
+    private static void printStudentList(String course, String query, JdbcHelper jdbc){
+        String s = "";
+        if (course!=""){
+            s = " in " + course;
+        }
         try{
-            ResultSet result = jdbc.query(sql);
+            ResultSet result = jdbc.query(query);
+            System.out.println("Students" + s);
+            System.out.println("==================");
+            String id = "";
             while(result.next()){
                 //get 3 field fromeach row
-                int id = result.getInt("id"); //or can be result.getInt(1);
-                String isbn = result.getString("isbn"); //or can be result.getString(ISBN); 
-                String title = result.getString("title");
+                if (s=="") {id = result.getString("id");}
+                String first = result.getString("firstName"); 
+                String last = result.getString("lastName");
                 
                 //print
-                System.out.printf("%1d %7s %s\n", id, isbn, title);//int, 2 strings 
+                if (s=="") {System.out.printf("%9s:", id);}
+                System.out.printf(" %s %s\n", first, last);
             }
+            System.out.println("==================");
+            System.out.println("\n");
         }
         catch(Exception e){
             System.out.println(e.getMessage());
         }
-        jdbc.disconnect();
     }
     
 }
