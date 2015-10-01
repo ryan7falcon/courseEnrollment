@@ -25,10 +25,8 @@ public class CourseEnrollment {
         jdbc.connect("jdbc:mysql://localhost:3306/ejd", 
                                         "root", "dataPASS");
    
-        //query to get a list of all students
-        String q0 = "SELECT * FROM Student";
-        //getting the result and printing 
-        printStudentList("Students", true, q0, null, jdbc); 
+        //print a list of all students
+        printAllStudents(jdbc); 
         
         //getting and printing the list of students in a particular course
         printStudentsInCourse("MATH10000", jdbc);
@@ -87,5 +85,12 @@ public class CourseEnrollment {
          ArrayList<Object> params = new ArrayList<Object>();
          params.add(course);
         printStudentList("Students in " + course, false, q, params, jdbc); 
+    }
+
+    private static void printAllStudents(JdbcHelper jdbc){
+        //query to get a list of all students
+        String q0 = "SELECT * FROM Student";
+        //getting the result and printing 
+        printStudentList("Students", true, q0, null, jdbc); 
     }
 }
